@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChoiceOne Bank Locations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ChoiceOne Brand Colors */
+        :root {
+            --color-teal: #116E6F; /* Main Teal */
+            --color-cyan: #009fd7; /* Main Cyan */
+            --color-dark-teal: #0D5657; /* Darker Teal for hover/active */
+            --color-light-gray: #f3f4f6;
+        }
+        .text-teal { color: var(--color-teal); }
+        .bg-teal { background-color: var(--color-teal); }
+        .text-cyan { color: var(--color-cyan); }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            padding: 0;
+            margin: 0;
+            line-height: 1.4;
+            /* Added scroll padding to account for the menu starting position (top-12) */
+            scroll-padding-top: 3rem; 
+        }
+
+        /* Styling for the alphabet menu buttons */
+        .alphabet-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 1.8rem; 
+            height: 1.8rem;
+            font-size: 0.75rem; 
+            font-weight: 600;
+            border-radius: 5px; 
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            user-select: none;
+            flex-shrink: 0;
+            background-color: var(--color-teal);
+            color: white;
+            box-shadow: 0 1px 3px rgba(17, 110, 111, 0.4);
+        }
+
+        .alphabet-button:hover {
+            background-color: var(--color-dark-teal);
+            transform: scale(1.1);
+        }
+
+        /* Hide the side menu on desktop and only show it on mobile/narrow screens */
+        @media (min-width: 768px) {
+            #side-alphabet-menu {
+                display: none;
+            }
+        }
+        /* Ensure main content takes up most space on mobile */
+        @media (max-width: 767px) {
+             .location-directory {
+                /* FINAL GUARANTEED FIX: Increased padding to 6.5rem to ensure clearance */
+                padding-right: 6.5rem !important; 
+                padding-top: 3rem !important; 
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <script>
+        const locationData = [
+            { name: "Almont", address: "5515 Van Dyke Rd., Almont, MI 48003", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A" },
+            { name: "Alpine", address: "5050 Alpine Ave. NW, Comstock Park MI 49321", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A" },
+            { name: "Armada", address: "72890 North Ave., Armada, MI 48005", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A" },
+            { name: "Attica", address: "4515 Imlay City Rd., Attica, MI 48412", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A" },
+
+            { name: "Bay City Loan Office", address: "268 Uptown Dr., Bay City, MI 48708", lobby: "By Appointment Only (ATM/ITM is walk up, located inside building's vestibule)", driveUp: "ITM Only: M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B" },
+            { name: "Birch Run", address: "8412 Main St., Birch Run, MI 48415", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B" },
+            { name: "Brighton", address: "134 North First Street, Brighton, MI 48116", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B" },
+            { name: "Burt - ATM/ITM", address: "10811 Albee Road, Burt, MI 48417", lobby: "ATM/ITM Only (No Lobby Hours)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B" },
+
+            { name: "Capac", address: "206 North Main St., Capac, MI 48014", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C" },
+            { name: "Cedar Springs", address: "4170 17 Mile Rd., NE, Cedar Springs, MI 49319", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C" },
+            { name: "Chesaning", address: "12771 Brady Rd., Chesaning, MI 48616", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "C" },
+            { name: "Chesaning - ATM", address: "148 S Chapman St., Chesaning, MI 48616", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "C" },
+            { name: "Coopersville", address: "661 West Randall, Coopersville, MI 49404", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C" },
+
+            { name: "Deerfield", address: "30 West Burnside Rd., Fostoria, MI 48435", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "D" },
+
+            { name: "Elba", address: "5508 Davison Rd., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "E" },
+
+            { name: "Fenton", address: "175 N Leroy St., Fenton, MI 48430", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F" },
+            { name: "Fenton: Silver Parkway", address: "15095 Silver Parkway, Fenton, MI 48430", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F" },
+            { name: "Fenton: Thompson Rd ATM", address: "3237 W Thompson Rd., Fenton, MI 48430", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "F" },
+            { name: "Fenton: VG's Food Center", address: "18005 Silver Parkway, Fenton, MI 48430", lobby: "M-F 11:00 – 7:00, Sat. 11:00 – 5:00, Sun. 11:00- 3:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F" },
+            { name: "Flint", address: "615 Saginaw Street, Flint, MI 48502", lobby: "M-F 10:00 – 2:00 (ATM Available for Flint Ferris Wheel Hours M-F 8:00 - 5:00)", driveUp: "M-F 8:00 – 2:00", section: "F" },
+            { name: "Fremont", address: "1423 West Main St., Fremont, MI 49412", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "F" },
+
+            { name: "Grand Blanc - North", address: "1401 E. Hill Road, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G" },
+            { name: "Grand Blanc - South", address: "7606 S. Saginaw Street, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00 (Closed from Noon - 1 pm. Onsite ITM is open during this time)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G" },
+            { name: "Grand Haven", address: "1120 S. Beacon Blvd., Grand Haven, MI 49417", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G" },
+            { name: "Grand Rapids", address: "330 Market Ave., SW, Grand Rapids, MI 49503", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "None listed", section: "G" },
+            { name: "Grand Rapids Loan Office", address: "2221 Health Dr. SW, Suite 1200, Wyoming, MI 49519", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "G" },
+            { name: "Grant", address: "10 West Main St., Grant, MI 49327", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G" },
+            { name: "Grass Lake", address: "12005 Michigan Avenue, Grass Lake, MI 49240", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G" },
+
+            { name: "Holland Loan Office", address: "151 Central Ave., Suite 120, Holland, MI 49423", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "H" },
+            { name: "Holly", address: "4043 Grange Hall Road, Holly, MI 48442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "H" },
+
+            { name: "Imlay City", address: "1875 S. Cedar St. (M-53), Imlay City, MI 48444", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "I" },
+
+            { name: "Kent City", address: "450 W. Muskegon, Kent City, MI 49330", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "K" },
+
+            { name: "Lapeer Downtown - ATM Only", address: "305 Pine St., Lapeer, MI 48446", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L" },
+            { name: "Lapeer Downtown (and Wealth Management)", address: "83 W. Nepessing St., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "L" },
+            { name: "Lapeer South", address: "637 S. Main St. (M-24), Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 8:30 – 6:00, S – 9:00 – 12:00", section: "L" },
+            { name: "Linden", address: "107 Main Street, Linden, MI 48451", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "L" },
+            { name: "Linden Alpine Marketplace - ATM", address: "604 W Broad St., Linden, MI 48451", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L" },
+
+            { name: "Memphis", address: "81111 Main St., Memphis, MI 48041", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M" },
+            { name: "Metamora", address: "950 W. Dryden Rd., Metamora, MI 48445", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M" },
+            { name: "Montrose", address: "200 W. State Street, Montrose, MI 48457", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "M" },
+            { name: "Munith", address: "201 North Main Street, Munith, MI 49259", lobby: "M-F 9:00 – 5:00 (Drive up same as lobby hours, Closed from Noon - 1 pm. Onsite ITM is open during this time. Lobby CLOSED on Sat.)", driveUp: "ITM HOURS: M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "M" },
+            { name: "Muskegon: Egelston", address: "5475 East Apple Ave., Muskegon, MI 49442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M" },
+            { name: "Muskegon: Harvey", address: "5797 Harvey St., Muskegon, MI 49444", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M" },
+            { name: "Muskegon: North", address: "180 North Causeway, North Muskegon, MI 49445", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M" },
+            { name: "Muskegon: Norton", address: "1030 W. Norton Ave., Muskegon, MI 49441", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M" },
+
+            { name: "New Lothrop", address: "9380 Genesee Street, New Lothrop, MI 48460", lobby: "M-F 9:00 – 5:00 (Closed from Noon - 1 pm)", driveUp: "M-F 9:00 – 5:00", section: "N" },
+            { name: "Newaygo", address: "246 West River Valley, Newaygo, MI 49337", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "N" },
+
+            { name: "Oakland Loan Office", address: "903 N. Opdyke Rd., Suite B, Auburn Hills, MI 48326", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "O" },
+
+            { name: "Port Huron Loan Office", address: "609 Huron Ave., Suite A, Port Huron, MI 48060", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "P" },
+
+            { name: "Ravenna", address: "3069 Slocum Rd., Ravenna, MI 49451", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R" },
+            { name: "Rockford - ATM Only", address: "2770 10 Mile Rd., Rockford, MI 49341", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "R" },
+            { name: "Rockford – Division", address: "590 E. Division St. NE, Rockford, MI 49341", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R" },
+
+            { name: "Saginaw", address: "218 S. Washington Ave., Suite 100, Saginaw, MI 48607", lobby: "M-F 9:00 – 5:00 (Closed from 1 pm - 2 pm. Walk up ITM located in office building is open during this time)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S" },
+            { name: "Sparta", address: "109 E. Division, Sparta, MI 49345", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "S" },
+            { name: "Sparta – Appletree", address: "416 W. Division, Sparta, MI 49345", lobby: "None listed", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30", section: "S" },
+            { name: "Sparta - Wealth Management", address: "129 E. Division St., Sparta, MI 49345", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "S" },
+            { name: "St. Charles", address: "207 S. Saginaw St., St. Charles, MI 48655", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S" },
+            { name: "Stockbridge", address: "5101 M-106, Stockbridge, MI 49285", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S" },
+
+            { name: "Thomas Township", address: "7590 Gratiot Rd., Saginaw, MI 48609", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "T" },
+
+            { name: "Yale", address: "3 N. Main St., Yale, MI 48097", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y" },
+            
+        ];
+
+        // Group the data by section
+        const groupedData = locationData.reduce((acc, location) => {
+            const section = location.section || location.name.charAt(0).toUpperCase();
+            if (!acc[section]) {
+                acc[section] = [];
+            }
+            acc[section].push(location);
+            return acc;
+        }, {});
+
+        // Define global variables
+        const availableSections = Object.keys(groupedData).sort();
+    </script>
+
+    <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
+        
+        <div class="text-center mb-6">
+            <img src="COB_HORIZONTAL_4C BlkBank.png" 
+                 alt="ChoiceOne Bank Logo" 
+                 class="mx-auto w-40 md:w-56"  
+                 style="height: auto; max-width: 250px;">
+        </div>
+        
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">ChoiceOne Bank Locations</h1>
+        
+        <div class="mb-8"></div> 
+
+        <div id="side-alphabet-menu" class="fixed right-0 top-12 z-50 p-2 bg-white rounded-l-lg shadow-xl border border-gray-200">
+            <div class="w-full flex flex-col justify-center items-center gap-1">
+                <script>
+                    const menuContainer = document.querySelector('#side-alphabet-menu > div');
+                    
+                    availableSections.forEach(letter => {
+                        const item = document.createElement('a');
+                        item.href = `#${letter}`; 
+                        
+                        item.className = 'alphabet-button';
+                        item.textContent = letter;
+                        menuContainer.appendChild(item);
+                    });
+                </script>
+            </div>
+        </div>
+
+        <div id="location-list">
+            <script>
+                const locationList = document.getElementById('location-list');
+                
+                availableSections.forEach((section) => {
+                    const locations = groupedData[section];
+
+                    // 1. Add the Section Header
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.className = 'section-header mt-8 mb-2';
+                    sectionHeader.innerHTML = `
+                        <h2 id="${section}" class="text-2xl font-extrabold uppercase text-teal border-b-4 border-cyan inline-block pb-1" style="letter-spacing: 0.1em;">${section}</h2>
+                    `;
+                    locationList.appendChild(sectionHeader);
+
+                    // 2. Add each Location Entry
+                    locations.forEach(location => {
+                        const driveUpText = location.driveUp || 'None listed';
+                        const lobbyText = location.lobby || 'None listed';
+                        const addressText = location.address.replace(/\n\s*/g, ' ');
+                        const encodedAddress = encodeURIComponent(addressText);
+                        const mapUrl = `https://www.google.com/maps/search/?api=1&query=$${encodedAddress}`;
+                        
+                        const locationEntry = document.createElement('div');
+                        locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
+                        locationEntry.innerHTML = `
+                            <div class="px-2">
+                                <h3 class="text-lg font-bold uppercase text-gray-800">${location.name}</h3>
+                                <div class="text-gray-600 text-sm mb-2">
+                                    <a href="${mapUrl}" target="_blank"
+                                       class="block text-cyan font-medium underline hover:text-blue-700 transition duration-150">
+                                        ${addressText}
+                                    </a>
+                                </div>
+                                
+                                <div class="flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs">
+                                    <p class="text-gray-600">
+                                        <span class="font-semibold text-gray-800">Lobby:</span> ${lobbyText}
+                                    </p>
+                                    <p class="text-gray-600">
+                                        <span class="font-semibold text-gray-800">Drive Up/ITM:</span> ${driveUpText}
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+                        locationList.appendChild(locationEntry);
+                    });
+                });
+            </script>
+        </div>
+        
+        <div class="mt-12 text-center text-gray-400 text-xs border-t pt-4 px-4 pb-8">
+            <p>Revised November 2025.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
