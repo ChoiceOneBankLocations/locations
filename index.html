@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locations and Hours</title>
+    <title>ChoiceOne Bank Locations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -176,34 +176,19 @@
 
         // Define global variables
         const availableSections = Object.keys(groupedData).sort();
-
-
-        // Function to detect OS for smart mapping
-        function getMapUrl(searchQuery) {
-            const encodedSearch = encodeURIComponent(searchQuery);
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            // Check if the user is on an Apple device (iOS or macOS)
-            if (/iPad|iPhone|iPod|Mac/.test(userAgent) && !window.MSStream) {
-                // Apple Maps URL format
-                return `http://googleusercontent.com/maps.apple.com/2{encodedSearch}`;
-            } else {
-                // Universal Google Maps URL format (for Android, Windows, Web)
-                return `https://www.google.com/maps/search/?api=1&query=${encodedSearch}`;
-            }
-        }
     </script>
 
     <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
         
-        <div class="text-center mb-6">
+      <div class="mb-6">
+            
             <img src="COB_HORIZONTAL_4C BlkBank.png" 
                  alt="ChoiceOne Bank Logo" 
-                 class="mx-auto w-40 md:w-56"  
+                 class="w-40 md:w-56"  
                  style="height: auto; max-width: 250px;">
         </div>
         
-        <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">ChoiceOne Bank Locations</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">Locations and Hours</h1>
         
         <div id="side-alphabet-menu" class="fixed right-0 top-12 z-50 p-2 bg-white rounded-l-lg shadow-xl border border-gray-200">
             <div class="w-full flex flex-col justify-center items-center gap-1">
@@ -245,8 +230,9 @@
                         // COMBINE: Bank Name + Location Name + Address for a targeted search
                         const searchQuery = `${location.name} ChoiceOne Bank, ${addressText}`; 
                         
-                        // Pass the full search query to the smart map function
-                        const mapUrl = getMapUrl(searchQuery); 
+                        // Use universal Google Maps link format
+                        const encodedSearch = encodeURIComponent(searchQuery); 
+                        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedSearch}`; 
 
                         const locationEntry = document.createElement('div');
                         locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
