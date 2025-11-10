@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChoiceOne Bank Locations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -23,11 +24,11 @@
             padding: 0;
             margin: 0;
             line-height: 1.4;
-            /* Added scroll padding to account for the menu starting position (top-12) */
-            scroll-padding-top: 3rem; 
+            /* Added scroll padding to account for the sticky menu */
+            scroll-padding-top: 5.5rem; 
         }
 
-        /* Styling for the alphabet menu buttons */
+        /* Styling for the alphabet menu buttons (reused for both menus) */
         .alphabet-button {
             display: flex;
             justify-content: center;
@@ -51,7 +52,7 @@
             transform: scale(1.1);
         }
 
-        /* Hide the side menu on desktop and only show it on mobile/narrow screens */
+        /* Hide the vertical side menu on tablet/desktop */
         @media (min-width: 768px) {
             #side-alphabet-menu {
                 display: none;
@@ -60,9 +61,26 @@
         /* Ensure main content takes up most space on mobile */
         @media (max-width: 767px) {
              .location-directory {
-                /* FINAL GUARANTEED FIX: Increased padding to 6.5rem to ensure clearance */
+                /* Padding for the vertical side menu */
                 padding-right: 6.5rem !important; 
                 padding-top: 3rem !important; 
+            }
+        }
+
+        /* NEW PRINT/PDF FIXES */
+        @media print {
+            .location-content-wrapper {
+                /* CRITICAL FIX: Prevents the browser from splitting the location entry across a page break */
+                page-break-inside: avoid;
+            }
+            /* CLEANUP: Hides ALL navigational menus in the print/PDF view */
+            #side-alphabet-menu, #top-alphabet-menu {
+                display: none !important;
+            }
+            /* Ensures main content expands when the menus are hidden */
+            .location-directory {
+                padding-right: 1.5rem !important; 
+                padding-top: 1.5rem !important; /* Reset top padding as the fixed menu is gone */
             }
         }
     </style>
@@ -164,6 +182,22 @@
 
         // Define global variables
         const availableSections = Object.keys(groupedData).sort();
+
+
+        // Function to detect OS for smart mapping
+        function getMapUrl(searchQuery) {
+            const encodedSearch = encodeURIComponent(searchQuery);
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Check if the user is on an Apple device (iOS or macOS)
+            if (/iPad|iPhone|iPod|Mac/.test(userAgent) && !window.MSStream) {
+                // Apple Maps URL format
+                return `http://googleusercontent.com/maps.apple.com/2{encodedSearch}`;
+            } else {
+                // Universal Google Maps URL format (for Android, Windows, Web)
+                return `https://www.google.com/maps/search/?api=1&query=${encodedSearch}`;
+            }
+        }
     </script>
 
     <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
@@ -175,10 +209,24 @@
                  style="height: auto; max-width: 250px;">
         </div>
         
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">ChoiceOne Bank Locations</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 text-center">ChoiceOne Bank Locations</h1>
         
-        <div class="mb-8"></div> 
-
+        <div id="top-alphabet-menu" class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-md py-2 px-2 md:px-6 mb-4">
+            <div class="flex flex-wrap justify-center gap-1.5 md:gap-2 mx-auto">
+                <script>
+                    const topMenuContainer = document.querySelector('#top-alphabet-menu > div');
+                    
+                    availableSections.forEach(letter => {
+                        const item = document.createElement('a');
+                        item.href = `#${letter}`; 
+                        
+                        item.className = 'alphabet-button md:w-6 md:h-6 md:text-xs';
+                        item.textContent = letter;
+                        topMenuContainer.appendChild(item);
+                    });
+                </script>
+            </div>
+        </div>
         <div id="side-alphabet-menu" class="fixed right-0 top-12 z-50 p-2 bg-white rounded-l-lg shadow-xl border border-gray-200">
             <div class="w-full flex flex-col justify-center items-center gap-1">
                 <script>
@@ -195,7 +243,6 @@
                 </script>
             </div>
         </div>
-
         <div id="location-list">
             <script>
                 const locationList = document.getElementById('location-list');
@@ -216,13 +263,17 @@
                         const driveUpText = location.driveUp || 'None listed';
                         const lobbyText = location.lobby || 'None listed';
                         const addressText = location.address.replace(/\n\s*/g, ' ');
-                        const encodedAddress = encodeURIComponent(addressText);
-                        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
                         
+                        // COMBINE: Bank Name + Location Name + Address for a targeted search
+                        const searchQuery = `${location.name} ChoiceOne Bank, ${addressText}`; 
+                        
+                        // Pass the full search query to the smart map function
+                        const mapUrl = getMapUrl(searchQuery); 
+
                         const locationEntry = document.createElement('div');
                         locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
                         locationEntry.innerHTML = `
-                            <div class="px-2">
+                            <div class="location-content-wrapper px-2">
                                 <h3 class="text-lg font-bold uppercase text-gray-800">${location.name}</h3>
                                 <div class="text-gray-600 text-sm mb-2">
                                     <a href="${mapUrl}" target="_blank"
@@ -248,14 +299,10 @@
         </div>
         
         <div class="mt-12 text-center text-gray-400 text-xs border-t pt-4 px-4 pb-8">
-            <p>Revised November 2025.</p>
+            <p>Revised November 2025. Please use the Print menu and select "Save as PDF" for the best printable output.</p>
         </div>
 
     </div>
 
 </body>
-
 </html>
-
-
-
