@@ -217,7 +217,7 @@
                         const lobbyText = location.lobby || 'None listed';
                         const addressText = location.address.replace(/\n\s*/g, ' ');
                         const encodedAddress = encodeURIComponent(addressText);
-                        const mapUrl = `http://googleusercontent.com/maps.apple.com/2{encodedAddress}`;
+                        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
                         
                         const locationEntry = document.createElement('div');
                         locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
@@ -256,5 +256,6 @@
 </body>
 
 </html>
+
 
 
