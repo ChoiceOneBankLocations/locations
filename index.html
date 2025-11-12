@@ -18,13 +18,22 @@
         .bg-teal { background-color: var(--color-teal); }
         .text-cyan { color: var(--color-cyan); }
         .text-brand-teal { color: var(--color-teal); } 
-        /* Custom class for the Loan Office asterisk to maintain font/size but increase weight */
-        .loan-asterisk { font-weight: 700; } 
+        /* The previous loan-asterisk class and its comment have been removed for simplicity and consistency. */
 
-        /* Standardize the look of the hours text itself */
+        /* Standardize the look of the hours text itself to match Lobby/Drive Up/ITM requirements */
         .hours-text-normal {
             color: #4b5563; /* Tailwind gray-700 equivalent for consistency */
             font-size: 0.875rem; /* text-sm equivalent */
+        }
+        
+        /* Standardize the look of all labels (Lobby:, Drive Up:, ITM (Live Video Teller) Hours:) */
+        .hours-label {
+            font-weight: 600; /* font-semibold equivalent */
+            color: #1f2937; /* Tailwind gray-800 equivalent */
+        }
+        /* Override for ITM label to be the bright blue color */
+        .hours-label.text-cyan {
+            color: var(--color-cyan);
         }
 
         body {
@@ -211,7 +220,8 @@
             { name: "Thomas Township", address: "7590 Gratiot Rd., Saginaw, MI 48609", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "T", hasATM24: true, isITM: true, type: "Branch" },
 
             // Y Section
-            { name: "Yale", address: "3 N. Main St., Yale, MI 40000", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true, isITM: false, type: "Branch" },
+            // CORRECTED ZIP CODE: 40000 -> 48097
+            { name: "Yale", address: "3 N. Main St., Yale, MI 48097", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true, isITM: false, type: "Branch" },
             
         ];
 
@@ -239,7 +249,8 @@
     <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
         
         <div class="mb-6">
-                        <img src="COB_HORIZONTAL_4C BlkBank.png" 
+            
+            <img src="COB_HORIZONTAL_4C BlkBank.png" 
                  alt="ChoiceOne Bank Logo" 
                  class="w-40 md:w-56"  
                  style="height: auto; max-width: 250px;">
@@ -295,7 +306,7 @@
 
                         // --- ATM NOTE (always first after address) ---
                         if (location.hasATM24 === true) {
-                            atmNote = '<p class="text-sm font-semibold text-teal mt-1">24 Hour ATM Available</p>';
+                            atmNote = '<p class="text-sm hours-label text-teal mt-1">24 Hour ATM Available</p>';
                         }
 
 
@@ -306,33 +317,28 @@
                         const isLoanOffice = location.type === "Loan Office";
 
 
-                        if (isATMOnly) {
-                             // If it's an ATM-Only location, suppress the hours content block entirely 
-                             // if the ATM label is in the name, otherwise show "ATM ONLY".
-                             if (!isNamedATM) {
-                                hoursContent = `<p class="text-gray-600 font-semibold text-lg">ATM ONLY</p>`;
-                                hoursClass = 'text-center'; 
-                             } else {
-                                hoursContent = ``;
-                                hoursClass = '';
-                             }
+                        if (isATMOnly && isNamedATM) {
+                             // ATM Only AND ATM in name (e.g., Burt - ATM/ITM, Chesaning - ATM). Suppress hours text entirely.
+                            hoursContent = ``;
+                            hoursClass = '';
                         } else if (isLoanOffice) {
                             // LOAN OFFICE / WEALTH MANAGEMENT
+                            // The entire "By Appointment Only*" text must be consistent with standard hours.
                             hoursContent = `
                                 <p class="hours-text-normal">
-                                    <span class="font-semibold text-gray-800">Lobby Hours:</span> By Appointment Only<span class="loan-asterisk">*</span>
+                                    <span class="hours-label">Lobby Hours:</span> By Appointment Only*
                                 </p>
                             `;
                             // Use standard hours class for left alignment
                             hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
                         } else {
-                            // STANDARD BRANCH LOGIC
+                            // STANDARD BRANCH LOGIC (or ATM Only without ATM in name)
                             const lobbyText = location.lobby || 'None listed';
                             let driveUpHoursDisplay = location.driveUp || 'None listed';
 
                             hoursContent = `
                                 <p class="hours-text-normal">
-                                    <span class="font-semibold text-gray-800">Lobby:</span> ${lobbyText}
+                                    <span class="hours-label">Lobby:</span> ${lobbyText}
                                 </p>
                             `;
                             
@@ -340,22 +346,29 @@
                             if (driveUpHoursDisplay && driveUpHoursDisplay !== 'None listed' && driveUpHoursDisplay !== 'Live Video Teller Available') {
                                 hoursContent += `
                                     <p class="hours-text-normal">
-                                        <span class="font-semibold text-gray-800">Drive Up:</span> ${driveUpHoursDisplay}
+                                        <span class="hours-label">Drive Up:</span> ${driveUpHoursDisplay}
                                     </p>
                                 `;
                             }
-                            hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
+                            
+                            // Handle the special case where an ATM Only location does NOT have ATM in the name
+                            if (isATMOnly && !isNamedATM) {
+                                hoursContent = `<p class="hours-text-normal text-center hours-label">ATM ONLY</p>`;
+                                hoursClass = 'text-center'; 
+                            } else {
+                                hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
+                            }
                         }
                         
                         
                         // --- ITM NOTE LOGIC (Always a separate block) ---
                         if (location.isITM === true) {
-                            // Add a top margin for spacing, adjusting if no hours content was rendered (e.g. Loan Office with only ITM or Named ATM Only)
+                            // Add a top margin for spacing, adjusting if no hours content was rendered
                             const topMargin = (hoursContent.trim().length > 0) ? 'mt-3' : 'mt-1';
 
                             itmNote = `
                                 <div class="${topMargin} text-sm text-center md:text-left">
-                                    <p class="font-semibold text-cyan">ITM (Live Video Teller) Hours:</p>
+                                    <p class="hours-label text-cyan">ITM (Live Video Teller) Hours:</p>
                                     <p class="hours-text-normal">${ITM_HOURS_TEXT}</p>
                                 </div>
                             `;
@@ -369,7 +382,7 @@
                                 <h3 class="text-lg font-bold uppercase text-gray-800">${location.name}</h3>
                                 <div class="text-gray-600 text-sm mb-2">
                                     <a href="${mapUrl}" target="_blank"
-                                       class="block text-cyan font-medium underline hover:text-blue-700 transition duration-150">
+                                       class="block text-cyan hours-label underline hover:text-blue-700 transition duration-150" style="font-weight: 500;">
                                         ${addressText}
                                     </a>
                                 </div>
