@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChoiceOne Bank Locations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght+300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* ChoiceOne Brand Colors */
         :root {
@@ -18,6 +18,14 @@
         .bg-teal { background-color: var(--color-teal); }
         .text-cyan { color: var(--color-cyan); }
         .text-brand-teal { color: var(--color-teal); } 
+        /* Custom class for the Loan Office asterisk to maintain font/size but increase weight */
+        .loan-asterisk { font-weight: 700; } 
+
+        /* Standardize the look of the hours text itself */
+        .hours-text-normal {
+            color: #4b5563; /* Tailwind gray-700 equivalent for consistency */
+            font-size: 0.875rem; /* text-sm equivalent */
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -90,7 +98,7 @@
             { name: "Birch Run", address: "8412 Main St., Birch Run, MI 48415", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Branch" },
             // ITM Location
             { name: "Brighton", address: "134 North First Street, Brighton, MI 48116", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Branch" },
-            // ITM Location
+            // ITM Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Burt - ATM/ITM", address: "10811 Albee Road, Burt, MI 48417", lobby: "ATM Only", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "ATM Only" },
 
             // C Section
@@ -98,6 +106,7 @@
             { name: "Cedar Springs", address: "4170 17 Mile Rd., NE, Cedar Springs, MI 49319", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true, isITM: false, type: "Branch" },
             // ITM Location
             { name: "Chesaning", address: "12771 Brady Rd., Chesaning, MI 48616", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "C", hasATM24: true, isITM: true, type: "Branch" },
+            // ATM Only Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Chesaning - ATM", address: "148 S Chapman St., Chesaning, MI 48616", lobby: "ATM Only", driveUp: "ATM Only (No Drive Up Hours listed)", section: "C", hasATM24: true, isITM: false, type: "ATM Only" },
             { name: "Coopersville", address: "661 West Randall, Coopersville, MI 49404", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true, isITM: false, type: "Branch" },
 
@@ -112,7 +121,7 @@
             { name: "Fenton", address: "175 N Leroy St., Fenton, MI 48430", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
             // ITM Location
             { name: "Fenton: Silver Parkway", address: "15095 Silver Parkway, Fenton, MI 48430", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
-            // ITM Location
+            // ITM Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Fenton: Thompson Rd ATM", address: "3237 W Thompson Rd., Fenton, MI 48430", lobby: "ATM Only", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "ATM Only" },
             // ITM Location
             { name: "Fenton: VG's Food Center", address: "18005 Silver Parkway, Fenton, MI 48430", lobby: "M-F 11:00 – 7:00, Sat. 11:00 – 5:00, Sun. 11:00- 3:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
@@ -145,12 +154,14 @@
             { name: "Kent City", address: "450 W. Muskegon, Kent City, MI 49330", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "K", hasATM24: true, isITM: false, type: "Branch" },
 
             // L Section
+            // ATM Only Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Lapeer Downtown - ATM Only", address: "305 Pine St., Lapeer, MI 48446", lobby: "ATM Only", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true, isITM: false, type: "ATM Only" },
             // Loan Office Logic Applied
             { name: "Lapeer Downtown (and Wealth Management)", address: "83 W. Nepessing St., Lapeer, MI 48446", lobby: "By Appointment Only", driveUp: "None listed", section: "L", hasATM24: true, isITM: false, type: "Loan Office" }, 
             { name: "Lapeer South", address: "637 S. Main St. (M-24), Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 8:30 – 6:00, S – 9:00 – 12:00", section: "L", hasATM24: true, isITM: false, type: "Branch" },
             // ITM Location
             { name: "Linden", address: "107 Main Street, Linden, MI 48451", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "L", hasATM24: true, isITM: true, type: "Branch" },
+            // ATM Only Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Linden Alpine Marketplace - ATM", address: "604 W Broad St., Linden, MI 48451", lobby: "ATM Only", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true, isITM: false, type: "ATM Only" },
 
             // M Section
@@ -179,6 +190,7 @@
 
             // R Section
             { name: "Ravenna", address: "3069 Slocum Rd., Ravenna, MI 49451", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true, isITM: false, type: "Branch" },
+            // ATM Only Location - Name contains ATM, so no 'ATM ONLY' text is needed in hours section
             { name: "Rockford - ATM Only", address: "2770 10 Mile Rd., Rockford, MI 49341", lobby: "ATM Only", driveUp: "ATM Only (No Drive Up Hours listed)", section: "R", hasATM24: true, isITM: false, type: "ATM Only" },
             { name: "Rockford – Division", address: "590 E. Division St. NE, Rockford, MI 49341", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true, isITM: false, type: "Branch" },
 
@@ -199,7 +211,7 @@
             { name: "Thomas Township", address: "7590 Gratiot Rd., Saginaw, MI 48609", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "T", hasATM24: true, isITM: true, type: "Branch" },
 
             // Y Section
-            { name: "Yale", address: "3 N. Main St., Yale, MI 48097", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Yale", address: "3 N. Main St., Yale, MI 40000", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true, isITM: false, type: "Branch" },
             
         ];
 
@@ -274,45 +286,60 @@
                         const searchQuery = `${location.name} ChoiceOne Bank, ${addressText}`; 
                         const mapUrl = getMapUrl(searchQuery); 
 
-                        // Determine Hours Content Based on Location Type
+                        // Initialize content variables
                         let hoursContent = '';
                         let hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
-                        let driveUpHoursDisplay = location.driveUp || 'None listed';
+                        let atmNote = ''; 
+                        let itmNote = '';
 
 
-                        if (location.type === "ATM Only") {
-                            // ATM ONLY
-                            hoursContent = `<p class="text-gray-600 font-semibold text-lg">ATM ONLY</p>`;
-                            hoursClass = 'text-center'; 
-                        } else if (location.type === "Loan Office") {
-                            // LOAN OFFICE / WEALTH MANAGEMENT
-                            
-                            // *** CRITICAL FIX: Only set this hours content if the location is NOT an ITM office. ***
-                            // For ITM Loan Offices (like Bay City), the ITM hours will serve as the primary visible hours.
-                            if (!location.isITM) {
-                                hoursContent = `<p class="text-gray-600 font-semibold text-lg">By Appointment Only*</p>`;
+                        // --- ATM NOTE (always first after address) ---
+                        if (location.hasATM24 === true) {
+                            atmNote = '<p class="text-sm font-semibold text-teal mt-1">24 Hour ATM Available</p>';
+                        }
+
+
+                        // --- HOURS CONTENT LOGIC ---
+
+                        const isNamedATM = location.name.toUpperCase().includes("ATM");
+                        const isATMOnly = location.type === "ATM Only";
+                        const isLoanOffice = location.type === "Loan Office";
+
+
+                        if (isATMOnly) {
+                             // If it's an ATM-Only location, suppress the hours content block entirely 
+                             // if the ATM label is in the name, otherwise show "ATM ONLY".
+                             if (!isNamedATM) {
+                                hoursContent = `<p class="text-gray-600 font-semibold text-lg">ATM ONLY</p>`;
                                 hoursClass = 'text-center'; 
-                            } else {
-                                // For ITM Loan Offices, we skip this block entirely so the area is clean for the ITM note.
-                                hoursContent = ``; 
+                             } else {
+                                hoursContent = ``;
                                 hoursClass = '';
-                            }
-                            
-                            driveUpHoursDisplay = null; // Suppress Drive-Up line for all Loan Offices
-                            
+                             }
+                        } else if (isLoanOffice) {
+                            // LOAN OFFICE / WEALTH MANAGEMENT
+                            hoursContent = `
+                                <p class="hours-text-normal">
+                                    <span class="font-semibold text-gray-800">Lobby Hours:</span> By Appointment Only<span class="loan-asterisk">*</span>
+                                </p>
+                            `;
+                            // Use standard hours class for left alignment
+                            hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
                         } else {
                             // STANDARD BRANCH LOGIC
                             const lobbyText = location.lobby || 'None listed';
-                            
+                            let driveUpHoursDisplay = location.driveUp || 'None listed';
+
                             hoursContent = `
-                                <p class="text-gray-600">
+                                <p class="hours-text-normal">
                                     <span class="font-semibold text-gray-800">Lobby:</span> ${lobbyText}
                                 </p>
                             `;
                             
+                            // Only show Drive Up if it's actual hours or "None listed", not the ITM placeholder
                             if (driveUpHoursDisplay && driveUpHoursDisplay !== 'None listed' && driveUpHoursDisplay !== 'Live Video Teller Available') {
                                 hoursContent += `
-                                    <p class="text-gray-600">
+                                    <p class="hours-text-normal">
                                         <span class="font-semibold text-gray-800">Drive Up:</span> ${driveUpHoursDisplay}
                                     </p>
                                 `;
@@ -320,31 +347,21 @@
                             hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
                         }
                         
-                        // Conditional ITM Note (applied to all location types with ITM)
-                        let itmNote = '';
-                        // For ITM Loan Offices (like Bay City), show the By Appointment note BEFORE the hours.
-                        if (location.isITM === true && location.type === "Loan Office") {
-                             itmNote += `<p class="text-gray-600 font-semibold text-lg mb-2">By Appointment Only*</p>`;
-                        }
-
+                        
+                        // --- ITM NOTE LOGIC (Always a separate block) ---
                         if (location.isITM === true) {
-                            itmNote += `
-                                <div class="mt-1 text-sm text-center md:text-left">
-                                    <p class="font-semibold text-brand-teal">ITM (Live Video Teller) Hours:</p>
-                                    <p class="text-gray-700">${ITM_HOURS_TEXT}</p>
+                            // Add a top margin for spacing, adjusting if no hours content was rendered (e.g. Loan Office with only ITM or Named ATM Only)
+                            const topMargin = (hoursContent.trim().length > 0) ? 'mt-3' : 'mt-1';
+
+                            itmNote = `
+                                <div class="${topMargin} text-sm text-center md:text-left">
+                                    <p class="font-semibold text-cyan">ITM (Live Video Teller) Hours:</p>
+                                    <p class="hours-text-normal">${ITM_HOURS_TEXT}</p>
                                 </div>
                             `;
                         }
-                        
-                        // Conditional 24 Hour ATM Note (standard ATM functionality)
-                        let atmNote = '';
-                        if (location.hasATM24 === true) {
-                            // If the location is a Loan Office, the ATM Note should go right after the address/map link.
-                            // If it's a standard Branch, it goes before the ITM note, if any.
-                            atmNote = '<p class="text-sm font-semibold text-teal mt-1">24 Hour ATM Available</p>';
-                        }
 
-
+                        // Combine all parts into the final HTML structure
                         const locationEntry = document.createElement('div');
                         locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
                         locationEntry.innerHTML = `
@@ -357,7 +374,7 @@
                                     </a>
                                 </div>
                                 
-                                ${location.hasATM24 ? atmNote : ''}
+                                ${atmNote} 
 
                                 <div class="mt-1 ${hoursClass}">
                                     ${hoursContent}
