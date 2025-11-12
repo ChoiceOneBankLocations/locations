@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChoiceOne Bank Locations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght+300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* ChoiceOne Brand Colors */
         :root {
@@ -25,7 +25,6 @@
             padding: 0;
             margin: 0;
             line-height: 1.4;
-            /* Adjusted scroll padding after removing top sticky menu */
             scroll-padding-top: 3rem; 
         }
 
@@ -55,7 +54,6 @@
 
         /* Ensure main content takes up most space on all devices and leaves room for the side menu */
         .location-directory {
-            /* Padding for the vertical side menu on the right */
             padding-right: 6.5rem !important; 
             padding-top: 3rem !important; 
         }
@@ -63,14 +61,11 @@
         /* NEW PRINT/PDF FIXES */
         @media print {
             .location-content-wrapper {
-                /* CRITICAL FIX: Prevents the browser from splitting the location entry across a page break */
                 page-break-inside: avoid;
             }
-            /* CLEANUP: Hides ALL navigational menus in the print/PDF view */
             #side-alphabet-menu {
                 display: none !important;
             }
-            /* Ensures main content expands when the menu is hidden for printing */
             .location-directory {
                 padding-right: 1.5rem !important; 
                 padding-top: 1.5rem !important; 
@@ -89,7 +84,7 @@
             { name: "Attica", address: "4515 Imlay City Rd., Attica, MI 48412", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true, isITM: false, type: "Branch" },
 
             // B Section
-            // ITM Location (Loan Office Logic Applied)
+            // ITM Location (Loan Office Logic Applied - Lobby is By Appointment, Drive Up is N/A)
             { name: "Bay City Loan Office", address: "268 Uptown Dr., Bay City, MI 48708", lobby: "By Appointment Only", driveUp: "None listed", section: "B", hasATM24: true, isITM: true, type: "Loan Office" },
             // ITM Location
             { name: "Birch Run", address: "8412 Main St., Birch Run, MI 48415", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Branch" },
@@ -232,8 +227,7 @@
     <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
         
         <div class="mb-6">
-            
-            <img src="COB_HORIZONTAL_4C BlkBank.png" 
+                        <img src="COB_HORIZONTAL_4C BlkBank.png" 
                  alt="ChoiceOne Bank Logo" 
                  class="w-40 md:w-56"  
                  style="height: auto; max-width: 250px;">
@@ -292,10 +286,20 @@
                             hoursClass = 'text-center'; 
                         } else if (location.type === "Loan Office") {
                             // LOAN OFFICE / WEALTH MANAGEMENT
-                            hoursContent = `<p class="text-gray-600 font-semibold text-lg">By Appointment Only*</p>`;
-                            hoursClass = 'text-center'; 
-                            // Ensure Drive Up is not displayed if it's a Loan Office
-                            driveUpHoursDisplay = null;
+                            
+                            // *** CRITICAL FIX: Only set this hours content if the location is NOT an ITM office. ***
+                            // For ITM Loan Offices (like Bay City), the ITM hours will serve as the primary visible hours.
+                            if (!location.isITM) {
+                                hoursContent = `<p class="text-gray-600 font-semibold text-lg">By Appointment Only*</p>`;
+                                hoursClass = 'text-center'; 
+                            } else {
+                                // For ITM Loan Offices, we skip this block entirely so the area is clean for the ITM note.
+                                hoursContent = ``; 
+                                hoursClass = '';
+                            }
+                            
+                            driveUpHoursDisplay = null; // Suppress Drive-Up line for all Loan Offices
+                            
                         } else {
                             // STANDARD BRANCH LOGIC
                             const lobbyText = location.lobby || 'None listed';
@@ -318,8 +322,13 @@
                         
                         // Conditional ITM Note (applied to all location types with ITM)
                         let itmNote = '';
+                        // For ITM Loan Offices (like Bay City), show the By Appointment note BEFORE the hours.
+                        if (location.isITM === true && location.type === "Loan Office") {
+                             itmNote += `<p class="text-gray-600 font-semibold text-lg mb-2">By Appointment Only*</p>`;
+                        }
+
                         if (location.isITM === true) {
-                            itmNote = `
+                            itmNote += `
                                 <div class="mt-1 text-sm text-center md:text-left">
                                     <p class="font-semibold text-brand-teal">ITM (Live Video Teller) Hours:</p>
                                     <p class="text-gray-700">${ITM_HOURS_TEXT}</p>
@@ -330,6 +339,8 @@
                         // Conditional 24 Hour ATM Note (standard ATM functionality)
                         let atmNote = '';
                         if (location.hasATM24 === true) {
+                            // If the location is a Loan Office, the ATM Note should go right after the address/map link.
+                            // If it's a standard Branch, it goes before the ITM note, if any.
                             atmNote = '<p class="text-sm font-semibold text-teal mt-1">24 Hour ATM Available</p>';
                         }
 
@@ -346,11 +357,12 @@
                                     </a>
                                 </div>
                                 
-                                <div class="${hoursClass}">
+                                ${location.hasATM24 ? atmNote : ''}
+
+                                <div class="mt-1 ${hoursClass}">
                                     ${hoursContent}
                                 </div>
                                 
-                                ${atmNote} 
                                 ${itmNote}
                             </div>
                         `;
