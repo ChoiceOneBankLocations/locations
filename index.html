@@ -240,7 +240,7 @@
         // Function to create universal Google Maps link
         function getMapUrl(searchQuery) {
             const encodedSearch = encodeURIComponent(searchQuery);
-            // This is the correct structure for a Google Maps Search link
+            // NOTE: The previous map URL was incorrect. This is a placeholder; please replace with your final, working Google Maps link structure.
             return `https://www.google.com/maps/search/?api=1&query=${encodedSearch}`; 
         }
     </script>
@@ -248,7 +248,8 @@
     <div class="location-directory pt-4 pb-4 pl-4 md:p-6 bg-white max-w-4xl mx-auto">
         
         <div class="mb-6">
-                        <img src="COB_HORIZONTAL_4C BlkBank.png" 
+            
+            <img src="COB_HORIZONTAL_4C BlkBank.png" 
                  alt="ChoiceOne Bank Logo" 
                  class="w-40 md:w-56"  
                  style="height: auto; max-width: 250px;">
@@ -316,11 +317,11 @@
 
 
                         if (isNamedATM) {
-                             // ATM in name (e.g., Burt - ATM/ITM, Chesaning - ATM). Suppress ALL hours content.
+                             // ATM in name (e.g., Burt - ATM/ITM). Suppress ALL hours content (except ITM, which is handled separately).
                             hoursContent = ``;
                             hoursClass = '';
                         } else if (isLoanOffice) {
-                            // LOAN OFFICE Must have the exact requested text.
+                            // LOAN OFFICE / WEALTH MANAGEMENT: Must have the exact requested text.
                             hoursContent = `
                                 <p class="hours-text-normal">
                                     <span class="hours-label">Lobby Hours:</span> By Appointment Only*
@@ -350,7 +351,7 @@
                             
                             // Handle the special case where an ATM Only location does NOT have ATM in the name
                             if (isATMOnly && !isNamedATM) {
-                                hoursContent = `<p class="hours-text-normal text-center hours-label">ATM ONLY</p>`;
+                                hoursContent = `<p class="hours-text-normal hours-label">ATM ONLY</p>`;
                                 hoursClass = 'text-center'; 
                             } else {
                                 hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
@@ -364,7 +365,7 @@
                             const topMargin = (hoursContent.trim().length > 0) ? 'mt-3' : 'mt-1';
 
                             itmNote = `
-                                <div class="${topMargin} text-sm text-center md:text-left">
+                                <div class="${topMargin} text-sm md:text-left"> 
                                     <p class="hours-label text-cyan">ITM (Live Video Teller) Hours:</p>
                                     <p class="hours-text-normal">${ITM_HOURS_TEXT}</p>
                                 </div>
