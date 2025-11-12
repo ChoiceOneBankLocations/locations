@@ -17,6 +17,7 @@
         .text-teal { color: var(--color-teal); }
         .bg-teal { background-color: var(--color-teal); }
         .text-cyan { color: var(--color-cyan); }
+        .text-orange { color: #f97316; } /* Used for the ITM note */
 
         body {
             font-family: 'Inter', sans-serif;
@@ -82,102 +83,122 @@
     <script>
         const locationData = [
             // A Section
-            { name: "Almont", address: "5515 Van Dyke Rd., Almont, MI 48003", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true },
-            { name: "Alpine", address: "5050 Alpine Ave. NW, Comstock Park MI 49321", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true },
-            { name: "Armada", address: "72890 North Ave., Armada, MI 48005", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: false }, // UPDATED: NO 24HR ATM
-            { name: "Attica", address: "4515 Imlay City Rd., Attica, MI 48412", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true },
+            { name: "Almont", address: "5515 Van Dyke Rd., Almont, MI 48003", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Alpine", address: "5050 Alpine Ave. NW, Comstock Park MI 49321", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Armada", address: "72890 North Ave., Armada, MI 48005", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: false, isITM: false, type: "Branch" }, 
+            { name: "Attica", address: "4515 Imlay City Rd., Attica, MI 48412", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "A", hasATM24: true, isITM: false, type: "Branch" },
 
             // B Section
-            { name: "Bay City Loan Office", address: "268 Uptown Dr., Bay City, MI 48708", lobby: "By Appointment Only (ATM/ITM is walk up, located inside building's vestibule)", driveUp: "ITM Only: M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B", hasATM24: true },
-            { name: "Birch Run", address: "8412 Main St., Birch Run, MI 48415", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B", hasATM24: true },
-            { name: "Brighton", address: "134 North First Street, Brighton, MI 48116", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B", hasATM24: true },
-            { name: "Burt - ATM/ITM", address: "10811 Albee Road, Burt, MI 48417", lobby: "ATM/ITM Only (No Lobby Hours)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "B", hasATM24: true },
+            // ITM Location
+            { name: "Bay City Loan Office", address: "268 Uptown Dr., Bay City, MI 48708", lobby: "By Appointment Only (ATM/ITM is walk up, located inside building's vestibule)", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Loan Office" },
+            // ITM Location
+            { name: "Birch Run", address: "8412 Main St., Birch Run, MI 48415", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Brighton", address: "134 North First Street, Brighton, MI 48116", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Burt - ATM/ITM", address: "10811 Albee Road, Burt, MI 48417", lobby: "ATM/ITM Only (No Lobby Hours)", driveUp: "Live Video Teller Available", section: "B", hasATM24: true, isITM: true, type: "ATM Only" },
 
             // C Section
-            { name: "Capac", address: "206 North Main St., Capac, MI 48014", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true },
-            { name: "Cedar Springs", address: "4170 17 Mile Rd., NE, Cedar Springs, MI 49319", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true },
-            { name: "Chesaning", address: "12771 Brady Rd., Chesaning, MI 48616", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "C", hasATM24: true },
-            { name: "Chesaning - ATM", address: "148 S Chapman St., Chesaning, MI 48616", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "C", hasATM24: true },
-            { name: "Coopersville", address: "661 West Randall, Coopersville, MI 49404", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true },
+            { name: "Capac", address: "206 North Main St., Capac, MI 48014", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Cedar Springs", address: "4170 17 Mile Rd., NE, Cedar Springs, MI 49319", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true, isITM: false, type: "Branch" },
+            // ITM Location
+            { name: "Chesaning", address: "12771 Brady Rd., Chesaning, MI 48616", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "C", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Chesaning - ATM", address: "148 S Chapman St., Chesaning, MI 48616", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "C", hasATM24: true, isITM: false, type: "ATM Only" }, // Not an ITM based on name/hours
+            { name: "Coopersville", address: "661 West Randall, Coopersville, MI 49404", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "C", hasATM24: true, isITM: false, type: "Branch" },
 
             // D Section
-            { name: "Deerfield", address: "30 West Burnside Rd., Fostoria, MI 48435", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "D", hasATM24: true },
+            { name: "Deerfield", address: "30 West Burnside Rd., Fostoria, MI 48435", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "D", hasATM24: true, isITM: false, type: "Branch" },
 
             // E Section
-            { name: "Elba", address: "5508 Davison Rd., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "E", hasATM24: true },
+            { name: "Elba", address: "5508 Davison Rd., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "E", hasATM24: true, isITM: false, type: "Branch" },
 
             // F Section
-            { name: "Fenton", address: "175 N Leroy St., Fenton, MI 48430", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F", hasATM24: true },
-            { name: "Fenton: Silver Parkway", address: "15095 Silver Parkway, Fenton, MI 48430", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F", hasATM24: true },
-            { name: "Fenton: Thompson Rd ATM", address: "3237 W Thompson Rd., Fenton, MI 48430", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "F", hasATM24: true },
-            { name: "Fenton: VG's Food Center", address: "18005 Silver Parkway, Fenton, MI 48430", lobby: "M-F 11:00 – 7:00, Sat. 11:00 – 5:00, Sun. 11:00- 3:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "F", hasATM24: true },
-            { name: "Flint", address: "615 Saginaw Street, Flint, MI 48502", lobby: "M-F 10:00 – 2:00 (ATM Available for Flint Ferris Wheel Hours M-F 8:00 - 5:00)", driveUp: "M-F 8:00 – 2:00", section: "F", hasATM24: false }, // UPDATED: NO 24HR ATM
-            { name: "Fremont", address: "1423 West Main St., Fremont, MI 49412", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "F", hasATM24: true },
+            // ITM Location
+            { name: "Fenton", address: "175 N Leroy St., Fenton, MI 48430", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Fenton: Silver Parkway", address: "15095 Silver Parkway, Fenton, MI 48430", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Fenton: Thompson Rd ATM", address: "3237 W Thompson Rd., Fenton, MI 48430", lobby: "ATM Only (No Lobby Hours)", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "ATM Only" },
+            // ITM Location
+            { name: "Fenton: VG's Food Center", address: "18005 Silver Parkway, Fenton, MI 48430", lobby: "M-F 11:00 – 7:00, Sat. 11:00 – 5:00, Sun. 11:00- 3:00", driveUp: "Live Video Teller Available", section: "F", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Flint", address: "615 Saginaw Street, Flint, MI 48502", lobby: "M-F 10:00 – 2:00 (ATM Available for Flint Ferris Wheel Hours M-F 8:00 - 5:00)", driveUp: "M-F 8:00 – 2:00", section: "F", hasATM24: false, isITM: false, type: "Branch" },
+            { name: "Fremont", address: "1423 West Main St., Fremont, MI 49412", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "F", hasATM24: true, isITM: false, type: "Branch" },
 
             // G Section
-            { name: "Grand Blanc - North", address: "1401 E. Hill Road, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G", hasATM24: true },
-            { name: "Grand Blanc - South", address: "7606 S. Saginaw Street, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00 (Closed from Noon - 1 pm. Onsite ITM is open during this time)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G", hasATM24: true },
-            { name: "Grand Haven", address: "1120 S. Beacon Blvd., Grand Haven, MI 49417", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G", hasATM24: true },
-            { name: "Grand Rapids", address: "330 Market Ave., SW, Grand Rapids, MI 49503", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "None listed", section: "G", hasATM24: true },
-            { name: "Grand Rapids Loan Office", address: "2221 Health Dr. SW, Suite 1200, Wyoming, MI 49519", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "G", hasATM24: false },
-            { name: "Grant", address: "10 West Main St., Grant, MI 49327", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G", hasATM24: true },
-            { name: "Grass Lake", address: "12005 Michigan Avenue, Grass Lake, MI 49240", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "G", hasATM24: true },
+            // ITM Location
+            { name: "Grand Blanc - North", address: "1401 E. Hill Road, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "G", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Grand Blanc - South", address: "7606 S. Saginaw Street, Grand Blanc, MI 48439", lobby: "M-F 9:00 – 5:00 (Onsite ITM is open during lunch)", driveUp: "Live Video Teller Available", section: "G", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Grand Haven", address: "1120 S. Beacon Blvd., Grand Haven, MI 49417", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Grand Rapids", address: "330 Market Ave., SW, Grand Rapids, MI 49503", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "None listed", section: "G", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Grand Rapids Loan Office", address: "2221 Health Dr. SW, Suite 1200, Wyoming, MI 49519", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "G", hasATM24: false, isITM: false, type: "Loan Office" },
+            { name: "Grant", address: "10 West Main St., Grant, MI 49327", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "G", hasATM24: true, isITM: false, type: "Branch" },
+            // ITM Location
+            { name: "Grass Lake", address: "12005 Michigan Avenue, Grass Lake, MI 49240", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "G", hasATM24: true, isITM: true, type: "Branch" },
 
             // H Section
-            { name: "Holland Loan Office", address: "151 Central Ave., Suite 120, Holland, MI 49423", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "H", hasATM24: false },
-            { name: "Holly", address: "4043 Grange Hall Road, Holly, MI 48442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "H", hasATM24: true },
+            { name: "Holland Loan Office", address: "151 Central Ave., Suite 120, Holland, MI 49423", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "H", hasATM24: false, isITM: false, type: "Loan Office" },
+            // ITM Location
+            { name: "Holly", address: "4043 Grange Hall Road, Holly, MI 48442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "H", hasATM24: true, isITM: true, type: "Branch" },
 
             // I Section
-            { name: "Imlay City", address: "1875 S. Cedar St. (M-53), Imlay City, MI 48444", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "I", hasATM24: true },
+            { name: "Imlay City", address: "1875 S. Cedar St. (M-53), Imlay City, MI 48444", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "I", hasATM24: true, isITM: false, type: "Branch" },
 
             // K Section
-            { name: "Kent City", address: "450 W. Muskegon, Kent City, MI 49330", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "K", hasATM24: true },
+            { name: "Kent City", address: "450 W. Muskegon, Kent City, MI 49330", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "K", hasATM24: true, isITM: false, type: "Branch" },
 
             // L Section
-            { name: "Lapeer Downtown - ATM Only", address: "305 Pine St., Lapeer, MI 48446", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true },
-            { name: "Lapeer Downtown (and Wealth Management)", address: "83 W. Nepessing St., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "L", hasATM24: true },
-            { name: "Lapeer South", address: "637 S. Main St. (M-24), Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 8:30 – 6:00, S – 9:00 – 12:00", section: "L", hasATM24: true },
-            { name: "Linden", address: "107 Main Street, Linden, MI 48451", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "L", hasATM24: true },
-            { name: "Linden Alpine Marketplace - ATM", address: "604 W Broad St., Linden, MI 48451", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true },
+            { name: "Lapeer Downtown - ATM Only", address: "305 Pine St., Lapeer, MI 48446", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true, isITM: false, type: "ATM Only" }, // Name suggests ATM only, not ITM
+            { name: "Lapeer Downtown (and Wealth Management)", address: "83 W. Nepessing St., Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "L", hasATM24: true, isITM: false, type: "Loan Office" }, // Not an ITM based on hours
+            { name: "Lapeer South", address: "637 S. Main St. (M-24), Lapeer, MI 48446", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 8:30 – 6:00, S – 9:00 – 12:00", section: "L", hasATM24: true, isITM: false, type: "Branch" },
+            // ITM Location
+            { name: "Linden", address: "107 Main Street, Linden, MI 48451", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "L", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Linden Alpine Marketplace - ATM", address: "604 W Broad St., Linden, MI 48451", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "L", hasATM24: true, isITM: false, type: "ATM Only" }, // Name suggests ATM only, not ITM
 
             // M Section
-            { name: "Memphis", address: "81111 Main St., Memphis, MI 48041", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
-            { name: "Metamora", address: "950 W. Dryden Rd., Metamora, MI 48445", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
-            { name: "Montrose", address: "200 W. State Street, Montrose, MI 48457", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "M", hasATM24: true },
-            { name: "Munith", address: "201 North Main Street, Munith, MI 49259", lobby: "M-F 9:00 – 5:00 (Drive up same as lobby hours, Closed from Noon - 1 pm. Onsite ITM is open during this time. Lobby CLOSED on Sat.)", driveUp: "ITM HOURS: M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "M", hasATM24: true },
-            { name: "Muskegon: Egelston", address: "5475 East Apple Ave., Muskegon, MI 49442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
-            { name: "Muskegon: Harvey", address: "5797 Harvey St., Muskegon, MI 49444", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
-            { name: "Muskegon: North", address: "180 North Causeway, North Muskegon, MI 49445", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
-            { name: "Muskegon: Norton", address: "1030 W. Norton Ave., Muskegon, MI 49441", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true },
+            { name: "Memphis", address: "81111 Main St., Memphis, MI 48041", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Metamora", address: "950 W. Dryden Rd., Metamora, MI 48445", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
+            // ITM Location
+            { name: "Montrose", address: "200 W. State Street, Montrose, MI 48457", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "M", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Munith", address: "201 North Main Street, Munith, MI 49259", lobby: "M-F 9:00 – 5:00 (Drive up same as lobby hours)", driveUp: "Live Video Teller Available", section: "M", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Muskegon: Egelston", address: "5475 East Apple Ave., Muskegon, MI 49442", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Muskegon: Harvey", address: "5797 Harvey St., Muskegon, MI 49444", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Muskegon: North", address: "180 North Causeway, North Muskegon, MI 49445", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Muskegon: Norton", address: "1030 W. Norton Ave., Muskegon, MI 49441", lobby: "M-TH 9:00 – 5:00, F – 9:00 – 5:30", driveUp: "M-TH 9:00 – 5:00, F – 9:00 – 5:30, S – 9:00 – 12:00", section: "M", hasATM24: true, isITM: false, type: "Branch" },
 
             // N Section
-            { name: "New Lothrop", address: "9380 Genesee Street, New Lothrop, MI 48460", lobby: "M-F 9:00 – 5:00 (Closed from Noon - 1 pm)", driveUp: "M-F 9:00 – 5:00", section: "N", hasATM24: true },
-            { name: "Newaygo", address: "246 West River Valley, Newaygo, MI 49337", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "N", hasATM24: true },
+            { name: "New Lothrop", address: "9380 Genesee Street, New Lothrop, MI 48460", lobby: "M-F 9:00 – 5:00 (Closed from Noon - 1 pm)", driveUp: "M-F 9:00 – 5:00", section: "N", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Newaygo", address: "246 West River Valley, Newaygo, MI 49337", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "N", hasATM24: true, isITM: false, type: "Branch" },
 
             // O Section
-            { name: "Oakland Loan Office", address: "903 N. Opdyke Rd., Suite B, Auburn Hills, MI 48326", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "O", hasATM24: false },
+            { name: "Oakland Loan Office", address: "903 N. Opdyke Rd., Suite B, Auburn Hills, MI 48326", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "O", hasATM24: false, isITM: false, type: "Loan Office" },
 
             // P Section
-            { name: "Port Huron Loan Office", address: "609 Huron Ave., Suite A, Port Huron, MI 48060", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "P", hasATM24: false },
+            { name: "Port Huron Loan Office", address: "609 Huron Ave., Suite A, Port Huron, MI 48060", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "P", hasATM24: false, isITM: false, type: "Loan Office" },
 
             // R Section
-            { name: "Ravenna", address: "3069 Slocum Rd., Ravenna, MI 49451", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true },
-            { name: "Rockford - ATM Only", address: "2770 10 Mile Rd., Rockford, MI 49341", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "R", hasATM24: true },
-            { name: "Rockford – Division", address: "590 E. Division St. NE, Rockford, MI 49341", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true },
+            { name: "Ravenna", address: "3069 Slocum Rd., Ravenna, MI 49451", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Rockford - ATM Only", address: "2770 10 Mile Rd., Rockford, MI 49341", lobby: "ATM Only (No Lobby Hours)", driveUp: "ATM Only (No Drive Up Hours listed)", section: "R", hasATM24: true, isITM: false, type: "ATM Only" },
+            { name: "Rockford – Division", address: "590 E. Division St. NE, Rockford, MI 49341", lobby: "M-F 9:00 – 5:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "R", hasATM24: true, isITM: false, type: "Branch" },
 
             // S Section
-            { name: "Saginaw", address: "218 S. Washington Ave., Suite 100, Saginaw, MI 48607", lobby: "M-F 9:00 – 5:00 (Closed from 1 pm - 2 pm. Walk up ITM located in office building is open during this time)", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S", hasATM24: true },
-            { name: "Sparta", address: "109 E. Division, Sparta, MI 49345", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "S", hasATM24: true },
-            { name: "Sparta – Appletree", address: "416 W. Division, Sparta, MI 49345", lobby: "None listed", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30", section: "S", hasATM24: true },
-            { name: "Sparta - Wealth Management", address: "129 E. Division St., Sparta, MI 49345", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "S", hasATM24: false },
-            { name: "St. Charles", address: "207 S. Saginaw St., St. Charles, MI 48655", lobby: "M-F 9:00 – 5:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S", hasATM24: true },
-            { name: "Stockbridge", address: "5101 M-106, Stockbridge, MI 49285", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "S", hasATM24: true },
+            // ITM Location
+            { name: "Saginaw", address: "218 S. Washington Ave., Suite 100, Saginaw, MI 48607", lobby: "M-F 9:00 – 5:00 (Onsite ITM is open during lunch)", driveUp: "Live Video Teller Available", section: "S", hasATM24: true, isITM: true, type: "Branch" },
+            { name: "Sparta", address: "109 E. Division, Sparta, MI 49345", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "S", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Sparta – Appletree", address: "416 W. Division, Sparta, MI 49345", lobby: "None listed", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30", section: "S", hasATM24: true, isITM: false, type: "Branch" },
+            { name: "Sparta - Wealth Management", address: "129 E. Division St., Sparta, MI 49345", lobby: "M-F 9:00 – 5:00", driveUp: "None listed", section: "S", hasATM24: false, isITM: false, type: "Loan Office" },
+            // ITM Location
+            { name: "St. Charles", address: "207 S. Saginaw St., St. Charles, MI 48655", lobby: "M-F 9:00 – 5:00", driveUp: "Live Video Teller Available", section: "S", hasATM24: true, isITM: true, type: "Branch" },
+            // ITM Location
+            { name: "Stockbridge", address: "5101 M-106, Stockbridge, MI 49285", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "S", hasATM24: true, isITM: true, type: "Branch" },
 
             // T Section
-            { name: "Thomas Township", address: "7590 Gratiot Rd., Saginaw, MI 48609", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00", section: "T", hasATM24: true },
+            // ITM Location
+            { name: "Thomas Township", address: "7590 Gratiot Rd., Saginaw, MI 48609", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "Live Video Teller Available", section: "T", hasATM24: true, isITM: true, type: "Branch" },
 
             // Y Section
-            { name: "Yale", address: "3 N. Main St., Yale, MI 48097", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true },
+            { name: "Yale", address: "3 N. Main St., Yale, MI 48097", lobby: "M-F 9:00 – 5:00, S – 9:00 – 12:00", driveUp: "M-TH 8:30 – 5:00, F – 8:30 – 5:30, S – 9:00 – 12:00", section: "Y", hasATM24: true, isITM: false, type: "Branch" },
             
         ];
 
@@ -211,7 +232,6 @@
                  class="w-40 md:w-56"  
                  style="height: auto; max-width: 250px;">
         </div>
-
         
         <div id="side-alphabet-menu" class="fixed right-0 top-12 z-50 p-2 bg-white rounded-l-lg shadow-xl border border-gray-200">
             <div class="w-full flex flex-col justify-center items-center gap-1">
@@ -231,6 +251,9 @@
         </div>
         <div id="location-list">
             <script>
+                // Define the consistent ITM hours
+                const ITM_HOURS_TEXT = 'M-F 7:00 – 7:00, Sat. 9:00 – 5:00, Sun. 11:00- 3:00';
+
                 const locationList = document.getElementById('location-list');
                 
                 availableSections.forEach((section) => {
@@ -246,20 +269,57 @@
 
                     // 2. Add each Location Entry
                     locations.forEach(location => {
-                        const lobbyText = location.lobby || 'None listed';
                         const addressText = location.address.replace(/\n\s*/g, ' ');
                         
-                        // COMBINE: Bank Name + Location Name + Address for a targeted search
                         const searchQuery = `${location.name} ChoiceOne Bank, ${addressText}`; 
-                        
-                        // Use universal Google Maps link format
                         const mapUrl = getMapUrl(searchQuery); 
 
-                        // Conditional ATM Note HTML
+                        // Determine Hours Content Based on Location Type
+                        let hoursContent = '';
+                        let hoursClass = 'flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs';
+                        let driveUpHoursDisplay = location.driveUp || 'None listed';
+
+
+                        if (location.type === "ATM Only") {
+                            // ATM ONLY (Check for ITM functionality)
+                            hoursContent = `<p class="text-gray-600 font-semibold text-lg">ATM ONLY</p>`;
+                            hoursClass = ''; // Clear class for center-align
+                            driveUpHoursDisplay = location.isITM ? 'Live Video Teller Available' : location.driveUp;
+                        } else if (location.type === "Loan Office") {
+                            // LOAN OFFICE / WEALTH MANAGEMENT
+                            hoursContent = `<p class="text-gray-600 font-semibold text-lg">By Appointment Only</p>`;
+                            hoursClass = ''; // Clear class for center-align
+                        } else {
+                            // STANDARD BRANCH LOGIC
+                            const lobbyText = location.lobby || 'None listed';
+                            
+                            hoursContent = `
+                                <p class="text-gray-600">
+                                    <span class="font-semibold text-gray-800">Lobby:</span> ${lobbyText}
+                                </p>
+                                <p class="text-gray-600">
+                                    <span class="font-semibold text-gray-800">Drive Up:</span> ${driveUpHoursDisplay}
+                                </p>
+                            `;
+                        }
+                        
+                        // Conditional ITM Note (applied to all location types)
+                        let itmNote = '';
+                        if (location.isITM === true) {
+                            itmNote = `
+                                <div class="mt-1 text-sm text-center md:text-left">
+                                    <p class="font-semibold text-orange">Live Video Teller Hours:</p>
+                                    <p class="text-gray-700">${ITM_HOURS_TEXT}</p>
+                                </div>
+                            `;
+                        }
+                        
+                        // Conditional 24 Hour ATM Note (standard ATM functionality)
                         let atmNote = '';
                         if (location.hasATM24 === true) {
                             atmNote = '<p class="text-sm font-semibold text-teal mt-1">24 Hour ATM Available</p>';
                         }
+
 
                         const locationEntry = document.createElement('div');
                         locationEntry.className = 'location-entry transition duration-150 hover:bg-gray-50 border-b border-gray-100 py-4';
@@ -273,16 +333,12 @@
                                     </a>
                                 </div>
                                 
-                                <div class="flex flex-wrap gap-x-8 gap-y-1 text-sm md:text-xs">
-                                    <p class="text-gray-600">
-                                        <span class="font-semibold text-gray-800">Lobby:</span> ${lobbyText}
-                                    </p>
-                                    <p class="text-gray-600">
-                                        <span class="font-semibold text-gray-800">Drive Up:</span> ${location.driveUp || 'None listed'}
-                                    </p>
+                                <div class="${hoursClass}">
+                                    ${hoursContent}
                                 </div>
                                 
                                 ${atmNote} 
+                                ${itmNote}
                             </div>
                         `;
                         locationList.appendChild(locationEntry);
@@ -292,7 +348,7 @@
         </div>
         
         <div class="mt-12 text-center text-gray-400 text-xs border-t pt-4 px-4 pb-8">
-            <p>Revised November 2025.</p>
+            <p>Revised November 2025</p>
         </div>
 
     </div>
